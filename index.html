@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dinesh Bishoyi</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --card: #141414;
+    --border: #2a2a2a;
+    --text: #ededed;
+    --muted: #666;
+    --accent: #ededed;
+    --accent-text: #0c0c0c;
+  }
+  .mood-collab   { --pill-bg:#e8f0ff; --pill-fg:#1a3080; --ring:#4a6cf7; }
+  .mood-business { --pill-bg:#e8fff0; --pill-fg:#0e4020; --ring:#22c55e; }
+  .mood-curious  { --pill-bg:#fff8e8; --pill-fg:#5c3a00; --ring:#f59e0b; }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .wrap { width: 100%; max-width: 420px; }
+
+  /* HEADER */
+  .header { text-align: center; margin-bottom: 1.75rem; }
+
+  .avatar-frame {
+    width: 84px; height: 84px;
+    border-radius: 50%;
+    border: 3px solid #ededed;
+    margin: 0 auto 1rem;
+    overflow: hidden;
+    box-shadow: 4px 4px 0px #444;
+  }
+  .avatar-frame img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.06em;
+    color: #ededed;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .header p {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 2px solid #2a2a2a;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 5px 5px 0px #000;
+    transition: box-shadow 0.3s;
+  }
+  .card.active { box-shadow: 5px 5px 0px var(--ring, #ededed); border-color: var(--ring, #ededed); }
+
+  .step { padding: 1.75rem; }
+
+  .step-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.9rem;
+  }
+
+  .mood-q {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 1.25rem;
+    color: #ededed;
+  }
+
+  .moods {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mood-btn {
+    background: #1c1c1c;
+    border: 1.5px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.18s;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    text-align: left;
+  }
+  .mood-btn:hover {
+    border-color: #555;
+    background: #252525;
+    transform: translateX(4px);
+  }
+  .mood-btn .emoji { font-size: 1.4rem; flex-shrink: 0; }
+  .mood-btn .mood-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.05em;
+    display: block;
+    line-height: 1;
+  }
+  .mood-btn .mood-sub { font-size: 0.75rem; color: var(--muted); display: block; margin-top: 3px; }
+
+  /* STEP 2 */
+  .step2 { display: none; }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 1.1rem;
+    padding: 0;
+    transition: color 0.2s;
+  }
+  .back-btn:hover { color: var(--text); }
+
+  .mood-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--pill-bg, #1a1a1a);
+    color: var(--pill-fg, #f5f0e8);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 5px 13px;
+    border-radius: 100px;
+    margin-bottom: 1.1rem;
+    letter-spacing: 0.03em;
+  }
+
+  .form-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.35rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 1.25rem;
+    color: #ededed;
+    line-height: 1.25;
+  }
+
+  .field { margin-bottom: 0.9rem; }
+  label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.35rem;
+  }
+  input, textarea {
+    width: 100%;
+    background: #1c1c1c;
+    border: 1.5px solid #2a2a2a;
+    border-radius: 11px;
+    color: var(--text);
+    font-size: 0.92rem;
+    font-family: 'Outfit', sans-serif;
+    padding: 0.68rem 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+  input::placeholder, textarea::placeholder { color: #444; }
+  input:focus, textarea:focus { border-color: #666; }
+  textarea { height: 115px; }
+
+  .submit-btn {
+    width: 100%;
+    padding: 0.88rem;
+    background: #ededed;
+    color: #0c0c0c;
+    font-size: 0.92rem;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+    border: 2px solid #ededed;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 0.25rem;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+  }
+  .submit-btn:hover { background: #ccc; }
+  .submit-btn:active { transform: scale(0.98); }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* SUCCESS */
+  .success-step {
+    display: none;
+    padding: 2.5rem 1.75rem;
+    text-align: center;
+  }
+  .success-icon {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    border: 2px solid #ededed;
+    background: #1c1c1c;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    margin: 0 auto 1.1rem;
+  }
+  .success-step h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+  .success-step p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+  /* CONFETTI */
+  .confetti-piece {
+    position: fixed;
+    animation: confetti-fall 2.5s ease-in forwards;
+    pointer-events: none;
+    z-index: 999;
+  }
+  @keyframes confetti-fall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in { animation: slideUp 0.3s ease forwards; }
+
+  .footer { text-align: center; font-size: 0.7rem; color: #444; margin-top: 1.1rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="avatar-frame">
+      <img src="data:image/jpeg;base64,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" alt="Dinesh"/>
+    </div>
+    <h1>DINESH BISHOYI</h1>
+    <p>Not much on Instagram lately — this is the best way to reach me. Every message gets read personally. Drop something and I'll get back to you.</p>
+  </div>
+
+  <div class="card" id="card">
+
+    <!-- STEP 1 -->
+    <div class="step step1" id="step1">
+      <p class="step-label">Step 1 of 2</p>
+      <p class="mood-q">WHAT'S ON YOUR MIND?</p>
+      <div class="moods">
+        <button class="mood-btn" onclick="pickMood('collab')">
+          <span class="emoji">🤝</span>
+          <div>
+            <span class="mood-name">LET'S COLLAB</span>
+            <span class="mood-sub">Got a project or idea in mind</span>
+          </div>
+        </button>
+        <button class="mood-btn" onclick="pickMood('business')">
+          <span class="emoji">📋</span>
+          <div>
+            <span class="mood-name">WORK / BUSINESS</span>
+            <span class="mood-sub">Serious enquiries, proposals</span>
+          </div>
+        </button>
+        <button class="mood-btn" onclick="pickMood('curious')">
+          <span class="emoji">💬</span>
+          <div>
+            <span class="mood-name">JUST TALKING</span>
+            <span class="mood-sub">A question, thought, or just hey</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step step2 animate-in" id="step2">
+      <button class="back-btn" onclick="goBack()">← back</button>
+      <div class="mood-pill" id="moodPill">🤝 Let's Collab</div>
+      <p class="form-title" id="formTitle">TELL ME WHAT YOU'RE THINKING.</p>
+
+      <form id="contactForm" onsubmit="handleSubmit(event)">
+        <input type="hidden" name="access_key" value="1ab4a825-12d5-471c-82c1-87a5d9b5418b"/>
+        <input type="hidden" name="mood" id="hiddenMood"/>
+        <input type="hidden" name="subject" id="hiddenSubject"/>
+        <input type="checkbox" name="botcheck" style="display:none"/>
+
+        <div class="field">
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" placeholder="What should I call you?" required/>
+        </div>
+
+        <div class="field">
+          <label for="message" id="msgLabel">Message</label>
+          <textarea id="message" name="message" placeholder="Go ahead..." required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Send →</button>
+      </form>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-step" id="successStep">
+      <div class="success-icon" id="successIcon">✓</div>
+      <h2 id="successTitle">GOT IT.</h2>
+      <p id="successMsg">I'll read this and get back to you.</p>
+    </div>
+
+  </div>
+
+  <p class="footer">dineshbishoyi · messages go straight to my inbox</p>
+</div>
+
+<script>
+const moods = {
+  collab: {
+    pill: '🤝 Let\'s Collab',
+    title: 'TELL ME WHAT YOU\'RE THINKING.',
+    msgLabel: 'Your idea',
+    placeholder: 'What\'s the project? What are you envisioning?',
+    btnText: 'Send it →',
+    successIcon: '🤝',
+    successTitle: 'COLLAB REQUEST IN.',
+    successMsg: 'Sounds interesting. I\'ll go through it and reach out soon.'
+  },
+  business: {
+    pill: '📋 Business',
+    title: 'LET\'S KEEP IT PROFESSIONAL.',
+    msgLabel: 'Your proposal',
+    placeholder: 'Who you are, what you need, and when — keep it direct.',
+    btnText: 'Submit →',
+    successIcon: '✅',
+    successTitle: 'RECEIVED.',
+    successMsg: 'I review enquiries carefully. You\'ll hear from me within a couple of days.'
+  },
+  curious: {
+    pill: '💬 Just Talking',
+    title: 'SAY WHATEVER.',
+    msgLabel: 'Your message',
+    placeholder: 'No filter needed — just type.',
+    btnText: 'Send →',
+    successIcon: '👋',
+    successTitle: 'MESSAGE SENT.',
+    successMsg: 'I read everything. Talk soon.'
+  }
+};
+
+let currentMood = null;
+
+function pickMood(mood) {
+  currentMood = mood;
+  const m = moods[mood];
+  const card = document.getElementById('card');
+  card.className = 'card active mood-' + mood;
+
+  document.getElementById('moodPill').textContent = m.pill;
+  document.getElementById('formTitle').textContent = m.title;
+  document.getElementById('msgLabel').textContent = m.msgLabel;
+  document.getElementById('message').placeholder = m.placeholder;
+  document.getElementById('submitBtn').textContent = m.btnText;
+  document.getElementById('hiddenMood').value = mood;
+  document.getElementById('hiddenSubject').value = 'New message — ' + m.pill;
+
+  document.getElementById('step1').style.display = 'none';
+  const s2 = document.getElementById('step2');
+  s2.style.display = 'block';
+  s2.classList.remove('animate-in');
+  void s2.offsetWidth;
+  s2.classList.add('animate-in');
+}
+
+function goBack() {
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step1').style.display = 'block';
+  document.getElementById('card').className = 'card';
+  currentMood = null;
+}
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: new FormData(document.getElementById('contactForm'))
+    });
+    const json = await res.json();
+    if (json.success) {
+      document.getElementById('step2').style.display = 'none';
+      const m = moods[currentMood];
+      document.getElementById('successIcon').textContent = m.successIcon;
+      document.getElementById('successTitle').textContent = m.successTitle;
+      document.getElementById('successMsg').textContent = m.successMsg;
+      const ss = document.getElementById('successStep');
+      ss.style.display = 'block';
+      ss.classList.remove('animate-in');
+      void ss.offsetWidth;
+      ss.classList.add('animate-in');
+      launchConfetti();
+    } else {
+      btn.disabled = false;
+      btn.textContent = moods[currentMood].btnText;
+      alert('Something went wrong. Try again!');
+    }
+  } catch {
+    btn.disabled = false;
+    btn.textContent = moods[currentMood].btnText;
+    alert('Network error.');
+  }
+}
+
+function launchConfetti() {
+  const colors = ['#4a6cf7','#22c55e','#f59e0b','#ededed','#666'];
+  for (let i = 0; i < 45; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    const size = 5 + Math.random() * 6;
+    el.style.cssText = `
+      left:${Math.random()*100}vw; top:-10px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      width:${size}px; height:${size}px;
+      border-radius:${Math.random()>.5?'50%':'2px'};
+      animation-delay:${Math.random()*1}s;
+      animation-duration:${2+Math.random()}s;
+    `;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 4000);
+  }
+}
+</script>
+</body>
+</html>
